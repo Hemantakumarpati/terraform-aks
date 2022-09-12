@@ -1,24 +1,24 @@
+variable "cluster_name" {
+}
+variable "resource_group_name" {
+}
+variable "environment" {
+}
+variable "location" {
+  default = "Central India"
+}
 variable "node_count" {
-    default = 1
+  default = 3
 }
-
-variable "dns_prefix" {
-    default = "k8stest"
+variable "node_size" {
+  default = "Standard_D2_v2"
 }
-
-variable cluster_name {
-    default = "k8stest"
+variable "service_principal" {
+  type = object({
+    client_id     = string
+    client_secret = string
+  })
+  description = "The service principal to use"
 }
-
-variable resource_group_name {
-    default = "azure-k8stest"
-}
-
-variable location {
-    default = "East US"
-#    default = "Australia East" # available on free tier
-}
-
-variable "vm_size" {
-    default = "Standard_B2s"
+variable dns_prefix {
 }
