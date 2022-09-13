@@ -15,7 +15,7 @@ variable "node_size" {
 }
 variable "service_principal" {
   type = list(object({
-    client_id     = string
+    client_id     = string,
     client_secret = string
   }))
   description = "The service principal to use"
