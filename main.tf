@@ -12,7 +12,7 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   location            = var.location
   resource_group_name = azurerm_resource_group.resource_group.name
   dns_prefix          = var.dns_prefix
-  local_account_disabled = "false"
+  //local_account_disabled = "false"
 
   default_node_pool {
     name       = "default"
