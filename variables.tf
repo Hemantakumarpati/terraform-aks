@@ -21,4 +21,5 @@ variable "service_principal" {
   description = "The service principal to use"
 }
 variable dns_prefix {
+    default = "aks-cluster-001"
 }
