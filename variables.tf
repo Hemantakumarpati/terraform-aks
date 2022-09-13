@@ -8,7 +8,7 @@ variable "location" {
   default = "Central India"
 }
 variable "node_count" {
-  default = 3
+  default = 2
 }
 variable "node_size" {
   default = "Standard_D2_v2"
