@@ -20,10 +20,10 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     vm_size    = var.node_size
   }
 
-  //service_principal {
-    //client_id     = var.service_principal.client_id
-    //client_secret = var.service_principal.client_secret
-  //}
+  service_principal {
+    client_id     = var.service_principal.client_id
+    client_secret = var.service_principal.client_secret
+  }
 
   tags = {
     Environment = var.environment
