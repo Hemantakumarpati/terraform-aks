@@ -24,3 +24,4 @@ variable "service_principal" {
 variable dns_prefix {
     default = "aks-cluster-001"
 }
+//test
