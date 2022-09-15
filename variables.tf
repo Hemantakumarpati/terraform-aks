@@ -14,8 +14,6 @@ variable "node_size" {
   default = "Standard_D2_v2"
 }
 
-  description = "The service principal to use"
-}
 variable dns_prefix {
     default = "aks-cluster-001"
 }
