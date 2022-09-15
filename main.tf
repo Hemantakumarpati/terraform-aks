@@ -1,66 +1,31 @@
-# Generate random resource group name
-resource "random_pet" "rg_name" {
-  prefix = var.resource_group_name_prefix
+provider "azurerm" {
+  version = "=1.43.0"
 }
 
-resource "azurerm_resource_group" "rg" {
-  location = var.resource_group_location
-  name     = random_pet.rg_name.id
+resource "azurerm_resource_group" "resource_group" {
+  name     = var.resource_group_name
+  location = var.location
 }
 
-resource "random_id" "log_analytics_workspace_name_suffix" {
-  byte_length = 8
-}
-
-resource "azurerm_log_analytics_workspace" "test" {
-  location            = var.log_analytics_workspace_location
-  # The WorkSpace name has to be unique across the whole of azure;
-  # not just the current subscription/tenant.
-  name                = "${var.log_analytics_workspace_name}-${random_id.log_analytics_workspace_name_suffix.dec}"
-  resource_group_name = azurerm_resource_group.rg.name
-  sku                 = var.log_analytics_workspace_sku
-}
-
-resource "azurerm_log_analytics_solution" "test" {
-  location              = azurerm_log_analytics_workspace.test.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  solution_name         = "ContainerInsights"
-  workspace_name        = azurerm_log_analytics_workspace.test.name
-  workspace_resource_id = azurerm_log_analytics_workspace.test.id
-
-  plan {
-    product   = "OMSGallery/ContainerInsights"
-    publisher = "Microsoft"
-  }
-}
-
-resource "azurerm_kubernetes_cluster" "k8s" {
-  location            = azurerm_resource_group.rg.location
+resource "azurerm_kubernetes_cluster" "aks_cluster" {
   name                = var.cluster_name
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.resource_group.name
   dns_prefix          = var.dns_prefix
-  tags                = {
-    Environment = "Development"
-  }
+  //local_account_disabled = "false"
 
   default_node_pool {
-    name       = "agentpool"
-    vm_size    = "Standard_D2_v2"
-    node_count = var.agent_count
+    name       = "default"
+    node_count = var.node_count
+    vm_size    = var.node_size
   }
-  linux_profile {
-    admin_username = "ubuntu"
 
-    ssh_key {
-      key_data = file(var.ssh_public_key)
-    }
-  }
-  network_profile {
-    network_plugin    = "kubenet"
-    load_balancer_sku = "standard"
-  }
   service_principal {
     client_id     = var.service_principal.client_id
     client_secret = var.service_principal.client_secret
+  }
+
+  tags = {
+    Environment = var.environment
   }
 }
